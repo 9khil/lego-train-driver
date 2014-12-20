@@ -1,0 +1,12 @@
+{
+  "name": "LEGO-Train-Driver",
+  "version": "0.0.1",
+  "private": true,
+  "author": "Andreas Stokholm <andreas@stokholm.me>",
+  "description": "Driving LEGO trains with a Tessel",
+  "dependencies": {
+    "nodejs-websocket": "^1.1.0",
+    "servo-pca9685": "^0.1.3",
+    "tessel": "*"
+  }
+}

@@ -2,13 +2,9 @@ var tessel = require('tessel');
 var servolib = require('servo-pca9685');
 var ws = require('nodejs-websocket');
 
-
 var servo = servolib.use(tessel.port['A']);
-
 var led = tessel.led[1].output(0);
 var connectionLed = tessel.led[0].output(0);
-
-
 
 servo.on('ready', function() {
   servo.configure(1, 0.05, 0.12, function() {
@@ -21,7 +17,6 @@ servo.on('ready', function() {
 
       // Turn on connection LED
       connectionLed.output(1);
-
       console.log('Socket client connection established!');
 
       connection.on('text', function(string) {
@@ -56,7 +51,6 @@ servo.on('ready', function() {
       });
 
     }).listen(1337);
-
 
   });
 });

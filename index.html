@@ -42,10 +42,12 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script type="application/javascript">
 
+		var tesselIp = '10.0.1.143';
+
 		// if user is running mozilla then use it's built-in WebSocket
 		window.WebSocket = window.WebSocket || window.MozWebSocket;
 
-		var connection = new WebSocket('ws://10.0.1.143:1337');
+		var connection = new WebSocket('ws://' + tesselIp + ':1337');
 
 		connection.onopen = function () {
 			// connection is opened and ready to use

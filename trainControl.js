@@ -6,10 +6,12 @@ var servo = servolib.use(tessel.port['A']);
 var led = tessel.led[1].output(0);
 var connectionLed = tessel.led[0].output(0);
 
+var lastDirection = undefined;
+
 servo.on('ready', function() {
   servo.configure(1, 0.05, 0.12, function() {
     // Set servo position to zero
-    servo.move(1, 0); // Setting servo to zero
+    servo.move(1, 0.5); // Resetting servo
     console.log('Ready for clients...');
 
     // Listen for clients
@@ -24,13 +26,29 @@ servo.on('ready', function() {
         console.log('Received ' + string);
 
         switch(string) {
-          case "drive":
-            connection.sendText('driving');
+          case "forwards":
+            connection.sendText('forwards');
             servo.move(1, 1);
+            lastDirection = 'forwards';
+            break;
+          case "backwards":
+            connection.sendText('backwards');
+            servo.move(1, 0.2);
+            lastDirection = 'backwards';
             break;
           case "stop":
             connection.sendText('stopped');
-            servo.move(1, 0);
+
+            if (lastDirection === 'forwards') {
+              servo.move(1, 0.425);
+            } else {
+              servo.move(1, 0.555);
+            }
+
+            setTimeout(function() {
+              servo.move(1, 0.5);
+            }, 300);
+
             break;
           default:
             console.log('and that is not a command!');
@@ -41,7 +59,7 @@ servo.on('ready', function() {
       });
 
       connection.on('close', function(code, reason) {
-        servo.move(1, 0);
+        servo.move(1, 0.5); // Resetting servo
         console.log('Lost connection');
         console.log('code', code);
         console.log('reason', reason);

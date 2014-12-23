@@ -1,10 +1,14 @@
-var tessel = require('tessel');
-var servolib = require('servo-pca9685');
-var ws = require('nodejs-websocket');
+var tessel = require('tessel'),
+    servolib = require('servo-pca9685'),
+    ws = require('nodejs-websocket'),
+    http = require('http'),
+    fs = require('fs');
 
 var servo = servolib.use(tessel.port['A']);
 var led = tessel.led[1].output(0);
 var connectionLed = tessel.led[0].output(0);
+
+var errorLed = tessel.led[2].output(0);
 
 var lastDirection = undefined;
 
@@ -14,8 +18,33 @@ servo.on('ready', function() {
     servo.move(1, 0.5); // Resetting servo
     console.log('Ready for clients...');
 
+    // Servos set up. Start web server.
+    http.createServer(function (request, response) {
+      console.log('Request received');
+      response.writeHead(200, {'Content-Type': 'text/html'});
+
+      fs.readFile('./index.html', function(error, data) {
+        if (error) {
+          console.log('Could not read file');
+          console.log(error);
+          errorLed.output(1);
+        }
+
+        response.end(data);
+      });
+    }).listen(80, '127.0.0.1');
+    console.log('WebServer started.');
+
     // Listen for clients
     var socket = ws.createServer(function(connection) {
+
+      function sendMessage(message) {
+        try {
+          connection.sendText(message);
+        } catch (e) {
+          errorLed.output(1);
+        }
+      }
 
       // Turn on connection LED
       connectionLed.output(1);
@@ -27,17 +56,17 @@ servo.on('ready', function() {
 
         switch(string) {
           case "forwards":
-            connection.sendText('forwards');
+            sendMessage('forwards');
             servo.move(1, 1);
             lastDirection = 'forwards';
             break;
           case "backwards":
-            connection.sendText('backwards');
-            servo.move(1, 0.2);
+            sendMessage('backwards');
+            servo.move(1, 0);
             lastDirection = 'backwards';
             break;
           case "stop":
-            connection.sendText('stopped');
+            sendMessage('stopped');
 
             if (lastDirection === 'forwards') {
               servo.move(1, 0.425);
@@ -69,6 +98,10 @@ servo.on('ready', function() {
       });
 
     }).listen(1337);
+
+    socket.on('error', function(error) {
+      servo.move(1, 0.5); // Stop train please..
+    });
 
   });
 });

@@ -4,7 +4,7 @@ Project for making a LEGO train go by the touch of a button on a phone.
 
 #Running
 
-Run the `trainControl.js` file on the Tessel, by running: `tessel run trainControl.js`
+Run the `index.js` file on the Tessel, by running: `tessel run index.js`
 
 Update the IP in `index.html` to reflect that of the Tessel. For instructions on WiFi, see the [Tessel website](http://start.tessel.io/wifi).
 

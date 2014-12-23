@@ -8,6 +8,6 @@ Run the entire package on the Tessel by issuing the command `tessel run .` in th
 
 Visit the Tessel's IP in a browser, and you should see this lovely interface:
 
-![Lego Train Driver interface](docs/interface.png)
+<img alt="LEGO Train Driver interface" width="300" src="docs/interface.png" />
 
 The green diode on the Tessel will turn on when there is an active socket connection. The blue when the train is driving.

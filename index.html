@@ -8,9 +8,8 @@
 		body {
 			margin:0;
 			text-align:center;
-			color: #999;
 			background:#3498db;
-			font-size:76px;
+			font-size:70px;
 			height:100%;
 			overflow:hidden;
 			-webkit-touch-callout: none;
@@ -19,23 +18,28 @@
 			-moz-user-select: none;
 			-ms-user-select: none;
 			user-select: none;
-		}
-
-		#drive {
-			width:100%;
-			height:400px;
-			padding-top:180px;
-			text-align:center;
 			color:#fff;
 			font-family: 'Ubuntu', sans-serif;
 		}
 
-		.driving {
-			background:#2ecc71;
+		#forwards, #backwards {
+			width:100%;
+			height:270px;
+			line-height:270px;
 		}
 
-		.stopped {
-			background:#3498db;
+		#forwards {
+			background: #2ecc71;
+		}
+
+		#backwards {
+			background: #2980b9;
+		}
+
+		#connectionStatus {
+			height:20px;
+			font-size:16px;
+			background:#34495e;
 		}
 	</style>
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
@@ -51,38 +55,47 @@
 
 		connection.onopen = function () {
 			// connection is opened and ready to use
+			$('#connectionStatus').text('Connected');
+		}
+
+		connection.onclose = function() {
+			$('#connectionStatus').text('Not connected');
 		}
 
 		connection.onerror = function (error) {
 			// an error occurred when sending/receiving data
+			$('#connectionStatus').text('Shit\'s on fire, yo! Check console!');
 		}
 
 		connection.onmessage = function (message) {
-			switch (message) {
-				case "driving":
-					$('body').removeClass('stopped').addClass('driving');
-					break;
-				case "stopped":
-					$('body').removeClass('driving').addClass('stopped');
-					break;
-			}
+			// Nothing yo!
 		}
 
 		$(document).ready(function() {
 
-			$('#drive').on({'touchstart': function() {
+			$('#forwards').on({'touchstart': function() {
 				connection.send('forwards');
+			}}).on({'touchend': function() {
+				connection.send('stop');
 			}});
 
-			$('#drive').on({'touchend': function() {
+			$('#backwards').on({'touchstart': function() {
+				connection.send('backwards');
+			}}).on({'touchend': function() {
 				connection.send('stop');
 			}});
 		});
 	</script>
 </head>
 <body>
-<div id="drive">
-	Hold to drive
+<div id="connectionStatus">
+	Connecting...
+</div>
+<div id="forwards">
+	Forwards
+</div>
+<div id="backwards">
+	Backwards
 </div>
 </body>
 </html>

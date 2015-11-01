@@ -1,6 +1,6 @@
 #LEGO Train Driver
 
-Project for making a LEGO train go by the touch of a button on a phone.
+Project for controlling a Lego train with Tessel and ir-sensor (1st generation Tessel and ir-attx4).
 
 #Running
 
@@ -11,3 +11,9 @@ Visit the Tessel's IP in a browser, and you should see this lovely interface ([T
 <img alt="LEGO Train Driver interface" width="300" src="docs/interface.png" />
 
 The green diode on the Tessel will turn on when there is an active socket connection. The blue when the train is driving.
+
+#Problems?
+
+- Use node 0.12.x
+- Check tessel-ip in index.html. Must be updated to Tessels IP.
+

@@ -1,10 +1,8 @@
 var tessel = require('tessel'),
-    servolib = require('servo-pca9685'),
     ws = require('nodejs-websocket'),
     http = require('http'),
     fs = require('fs');
 
-var servo = servolib.use(tessel.port['A']);
 var led = tessel.led[1].output(0);
 var connectionLed = tessel.led[0].output(0);
 
@@ -12,13 +10,7 @@ var errorLed = tessel.led[2].output(0);
 
 var lastDirection = undefined;
 
-servo.on('ready', function() {
-  servo.configure(1, 0.05, 0.12, function() {
-    // Set servo position to zero
-    servo.move(1, 0.5); // Resetting servo
-    console.log('Ready for clients...');
-
-    // Servos set up. Start web server.
+// Start web server.
     http.createServer(function (request, response) {
       console.log('Request received');
       response.writeHead(200, {'Content-Type': 'text/html'});
@@ -57,25 +49,25 @@ servo.on('ready', function() {
         switch(string) {
           case "forwards":
             sendMessage('forwards');
-            servo.move(1, 1);
+         
             lastDirection = 'forwards';
             break;
           case "backwards":
             sendMessage('backwards');
-            servo.move(1, 0);
+       
             lastDirection = 'backwards';
             break;
           case "stop":
             sendMessage('stopped');
 
             if (lastDirection === 'forwards') {
-              servo.move(1, 0.425);
+       //       servo.move(1, 0.425);
             } else {
-              servo.move(1, 0.555);
+       //       servo.move(1, 0.555);
             }
 
             setTimeout(function() {
-              servo.move(1, 0.5);
+   //           servo.move(1, 0.5);
             }, 300);
 
             break;
@@ -88,7 +80,7 @@ servo.on('ready', function() {
       });
 
       connection.on('close', function(code, reason) {
-        servo.move(1, 0.5); // Resetting servo
+      //  servo.move(1, 0.5); // Resetting servo
         console.log('Lost connection');
         console.log('code', code);
         console.log('reason', reason);
@@ -100,8 +92,5 @@ servo.on('ready', function() {
     }).listen(1337);
 
     socket.on('error', function(error) {
-      servo.move(1, 0.5); // Stop train please..
+    //  servo.move(1, 0.5); // Stop train please..
     });
-
-  });
-});

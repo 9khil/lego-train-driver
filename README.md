@@ -4,6 +4,8 @@ Project for controlling a Lego train with Tessel and ir-sensor (1st generation T
 
 #Running
 
+Install tessel-cli, read more here: https://github.com/tessel/t1-docs/blob/master/cli.md#installation
+
 First make sure you have all the packages installed by running `npm install`, and then run the entire package on the Tessel by issuing the command `tessel run .`.
 
 Visit the Tessel's IP in a browser, and you should see this lovely interface ([Tessel WiFi docs](http://start.tessel.io/wifi)):
@@ -14,6 +16,7 @@ The green diode on the Tessel will turn on when there is an active socket connec
 
 #Problems?
 
-- Use node 0.12.x
+- Use node 0.12.x 
 - Check tessel-ip in index.html. Must be updated to Tessels IP.
+- Tessel v1 docs: https://github.com/tessel/t1-docs
 

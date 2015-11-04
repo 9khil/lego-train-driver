@@ -5,6 +5,8 @@
   "author": "Nikhil André Luthra <nikhil.a.luthra@gmail.com>",
   "description": "Driving LEGO trains with a Tessel and IR-sensor, based on a project by AndreasStokholm.",
   "dependencies": {
-    "nodejs-websocket": "^1.1.0"
+    "nodejs-websocket": "1.1.0",
+    "lego-ir": "*",
+    "ir-attx4": "*"
   }
 }

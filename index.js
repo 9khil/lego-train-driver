@@ -16,20 +16,10 @@ var lego = new LegoIR({
   channel: 1
 });
 
-var legoBuffer = lego.move({
-  outputA: 'forward2',
-  outputB: 'forward2'
-});
-
-
-
-
 var led = tessel.led[1].output(0);
 var connectionLed = tessel.led[0].output(0);
 
 var errorLed = tessel.led[2].output(0);
-
-var lastDirection = undefined;
 
 infrared.on('ready', function(){
   if(err) throw new Error(err);
@@ -72,32 +62,28 @@ infrared.on('ready', function(){
 
           console.log('Received ' + string);
 
-          switch(string) {
+          var command = JSON.parse(string);
+
+          switch(command['direction']) {
             case "forwards":
-              sendMessage('forwards');
-                sendRawIrSignal(lego.move({
-                  outputA: 'forward',
-                  outputB: 'forward'
-                }));
-              lastDirection = 'forwards';
+              sendRawIrSignal(lego.move({
+                outputA: 'forward',
+                outputB: 'forward'
+              }));
               break;
             case "backwards":
-              sendMessage('backwards');
               sendRawIrSignal(lego.move({
                 outputA: 'backward',
                 outputB: 'backward'
               }));
-              lastDirection = 'backwards';
               break;
             case "stop":
-              sendMessage('stopped');
               sendRawIrSignal(lego.move({
                 outputA: 'brake',
                 outputB: 'brake'
               }));
               break;
             case "backward2": //testing
-              sendMessage('forward2');
               sendRawIrSignal(lego.move({
                 outputA: 'forward2',
                 outputB: 'forward2'
@@ -111,7 +97,7 @@ infrared.on('ready', function(){
         });
 
         connection.on('close', function(code, reason) {
-        //  servo.move(1, 0.5); // Resetting servo
+
           console.log('Lost connection');
           console.log('code', code);
           console.log('reason', reason);
@@ -123,12 +109,8 @@ infrared.on('ready', function(){
       }).listen(1338);
 
       socket.on('error', function(error) {
-      //  servo.move(1, 0.5); // Stop train please..
+        console.log("socket error: " + error);
       });
-
-  /*
-
-    */
 
 });
 
